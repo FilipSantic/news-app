@@ -1,8 +1,10 @@
-import express, { Application, Request, Response } from "express";
+import express, { Application } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import mongoose from "mongoose";
+import morgan from "morgan";
 import "colors";
+import connectDB from "./config/db";
+import authRoutes from "./routes/auth";
 
 dotenv.config();
 
@@ -12,19 +14,19 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("Testing!");
-});
+if (process.env.NODE_ENV === "development") {
+  app.use(morgan("tiny"));
+}
 
-mongoose
-  .connect(process.env.MONGO_URI || "", {})
+app.use("/api/auth", authRoutes);
+
+connectDB()
   .then(() => {
-    console.log("Connected to MongoDB".magenta);
-
     app.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`.cyan);
     });
   })
   .catch((error) => {
-    console.error("Error connecting to MongoDB:".red, error);
+    console.error("Failed to start server:".red, error);
+    process.exit(1);
   });
