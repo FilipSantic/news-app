@@ -4,7 +4,9 @@ import dotenv from "dotenv";
 import morgan from "morgan";
 import "colors";
 import connectDB from "./config/db";
-import authRoutes from "./routes/auth";
+import authRoutes from "./routes/authRoutes";
+import bookmarkRoutes from "./routes/bookmarkRoutes";
+import newsRoutes from "./routes/newsRoutes";
 
 dotenv.config();
 
@@ -19,6 +21,8 @@ if (process.env.NODE_ENV === "development") {
 }
 
 app.use("/api/auth", authRoutes);
+app.use("/api/bookmarks", bookmarkRoutes);
+app.use("/api/news", newsRoutes);
 
 connectDB()
   .then(() => {

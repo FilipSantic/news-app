@@ -7,16 +7,20 @@ interface IUser {
   password: string;
   isVerified: boolean;
   verificationToken?: string;
+  verificationTokenExpires?: Date;
 }
 
 const userSchema = new Schema<IUser>({
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
+  email: { type: String, required: true },
   password: { type: String, required: true },
   isVerified: { type: Boolean, default: false },
   verificationToken: { type: String },
+  verificationTokenExpires: { type: Date },
 });
+
+userSchema.index({ email: 1 }, { unique: true });
 
 const User = model<IUser>("User", userSchema);
 
