@@ -1,0 +1,8 @@
+@import "../../styles/variables";
+
+.home-container {
+  background-color: $background-color;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+}
