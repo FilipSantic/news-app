@@ -1,8 +1,142 @@
 @import "../../styles/variables";
 
-.home-container {
+.container {
   background-color: $background-color;
-  padding: 1rem;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  margin: 0 auto;
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding-bottom: 4rem;
+
+  .headerSection {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2rem 0;
+    border-bottom: 1px solid rgba(151, 151, 151, 0.1);
+    box-sizing: border-box;
+  }
+
+  .authButtons {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .signinButton,
+  .signupButton {
+    background-color: $primary-color;
+    color: white;
+    border: none;
+    padding: 0.8rem 1rem;
+    border-radius: 10px;
+    font-family: "Inter", sans-serif;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: darken($primary-color, 10%);
+    }
+  }
+
+  .signupButton {
+    background-color: darkred;
+  }
+
+  .content {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+  }
+
+  .mainContent {
+    flex: 3;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .articleSection {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    width: 100%;
+    margin: 0 auto;
+    box-sizing: border-box;
+
+    .twoColumnSection {
+      grid-column: 1 / span 3;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      align-items: stretch;
+
+      .articlesGrid {
+        grid-column: 1 / span 2;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+      }
+
+      .latestNewsWrapper {
+        grid-column: 3 / 4;
+        position: sticky;
+        background-color: white;
+        overflow-y: auto;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+        h2 {
+          margin: 0;
+          padding: 1rem;
+          font-size: 1.2rem;
+          font-weight: bold;
+          color: #333;
+          background-color: inherit;
+          border-radius: 8px 8px 0 0;
+        }
+
+        .newsIcon {
+          width: 1.2rem;
+          height: 1.2rem;
+          margin-right: 8px;
+          vertical-align: middle;
+        }
+
+        ::-webkit-scrollbar {
+          width: 20px;
+        }
+
+        ::-webkit-scrollbar-track {
+          background-color: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+          background-color: #979797;
+        }
+
+        ::-webkit-scrollbar-thumb {
+          background-color: #979797;
+          border-radius: 20px;
+          border: 6px solid transparent;
+          background-clip: content-box;
+        }
+      }
+    }
+
+    .threeColumnSection {
+      grid-column: 1 / span 3;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+
+      .articlesGrid {
+        grid-column: 1 / span 3;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 1rem;
+      }
+    }
+  }
 }

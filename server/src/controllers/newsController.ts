@@ -6,19 +6,47 @@ export const getAllNews = async (req: Request, res: Response) => {
     const page = parseInt(req.query.page as string) || 1;
     const pageSize = parseInt(req.query.pageSize as string) || 20;
 
-    const response = await axios.get(`${process.env.NEWS_API_URL}/everything`, {
-      params: {
-        apiKey: process.env.NEWS_API_KEY,
-        q: "news",
-        language: "en",
-        sortBy: "publishedAt",
-        page,
-        pageSize,
-      },
-    });
+    let currentPage = page;
+    let articles: any[] = [];
+    let totalResults = 0;
 
-    const articles = response.data.articles;
-    const totalResults = response.data.totalResults;
+    while (articles.length < pageSize) {
+      const response = await axios.get(
+        `${process.env.NEWS_API_URL}/everything`,
+        {
+          params: {
+            apiKey: process.env.NEWS_API_KEY,
+            q: "news",
+            language: "en",
+            sortBy: "publishedAt",
+            page: currentPage,
+            pageSize,
+          },
+        }
+      );
+
+      const fetchedArticles = response.data.articles;
+      totalResults = response.data.totalResults;
+
+      const validArticles = fetchedArticles.filter(
+        (article: any) => article.title !== "[Removed]"
+      );
+
+      articles = articles.concat(validArticles);
+
+      if (fetchedArticles.length === 0 || articles.length >= pageSize) {
+        break;
+      }
+
+      currentPage++;
+    }
+
+    articles = articles.slice(0, pageSize);
+
+    if ((page - 1) * pageSize >= totalResults || (page - 1) * pageSize >= 100) {
+      res.status(400).json({ message: "No more results available." });
+      return;
+    }
 
     res.status(200).json({
       articles,
@@ -34,20 +62,39 @@ export const getAllNews = async (req: Request, res: Response) => {
 
 export const getTopHeadlines = async (req: Request, res: Response) => {
   try {
-    const limit = parseInt(req.query.limit as string) || 10;
+    const limit = parseInt(req.query.limit as string) || 16;
+    let articles: any[] = [];
+    let page = 1;
 
-    const response = await axios.get(
-      `${process.env.NEWS_API_URL}/top-headlines`,
-      {
-        params: {
-          apiKey: process.env.NEWS_API_KEY,
-          country: "us",
-          pageSize: limit,
-        },
+    while (articles.length < limit) {
+      const response = await axios.get(
+        `${process.env.NEWS_API_URL}/top-headlines`,
+        {
+          params: {
+            apiKey: process.env.NEWS_API_KEY,
+            country: "us",
+            pageSize: limit,
+            page,
+          },
+        }
+      );
+
+      const fetchedArticles = response.data.articles;
+
+      const validArticles = fetchedArticles.filter(
+        (article: any) => article.title !== "[Removed]"
+      );
+
+      articles = articles.concat(validArticles);
+
+      if (fetchedArticles.length === 0 || articles.length >= limit) {
+        break;
       }
-    );
 
-    const articles = response.data.articles;
+      page++;
+    }
+
+    articles = articles.slice(0, limit);
 
     res.status(200).json({ articles });
   } catch (error: any) {
@@ -67,21 +114,41 @@ export const getNewsByCategory = async (req: Request, res: Response) => {
       return;
     }
 
-    const response = await axios.get(
-      `${process.env.NEWS_API_URL}/top-headlines`,
-      {
-        params: {
-          apiKey: process.env.NEWS_API_KEY,
-          category,
-          country: "us",
-          page,
-          pageSize,
-        },
-      }
-    );
+    let articles: any[] = [];
+    let currentPage = page;
+    let totalResults = 0;
 
-    const articles = response.data.articles;
-    const totalResults = response.data.totalResults;
+    while (articles.length < pageSize) {
+      const response = await axios.get(
+        `${process.env.NEWS_API_URL}/top-headlines`,
+        {
+          params: {
+            apiKey: process.env.NEWS_API_KEY,
+            category,
+            country: "us",
+            page: currentPage,
+            pageSize,
+          },
+        }
+      );
+
+      const fetchedArticles = response.data.articles;
+      totalResults = response.data.totalResults;
+
+      const validArticles = fetchedArticles.filter(
+        (article: any) => article.title !== "[Removed]"
+      );
+
+      articles = articles.concat(validArticles);
+
+      if (fetchedArticles.length === 0 || articles.length >= pageSize) {
+        break;
+      }
+
+      currentPage++;
+    }
+
+    articles = articles.slice(0, pageSize);
 
     res.status(200).json({
       articles,
@@ -107,19 +174,42 @@ export const searchNews = async (req: Request, res: Response) => {
     const page = parseInt(req.query.page as string) || 1;
     const pageSize = parseInt(req.query.pageSize as string) || 20;
 
-    const response = await axios.get(`${process.env.NEWS_API_URL}/everything`, {
-      params: {
-        apiKey: process.env.NEWS_API_KEY,
-        q: searchQuery,
-        language: "en",
-        sortBy: "publishedAt",
-        page,
-        pageSize,
-      },
-    });
+    let articles: any[] = [];
+    let currentPage = page;
+    let totalResults = 0;
 
-    const articles = response.data.articles;
-    const totalResults = response.data.totalResults;
+    while (articles.length < pageSize) {
+      const response = await axios.get(
+        `${process.env.NEWS_API_URL}/everything`,
+        {
+          params: {
+            apiKey: process.env.NEWS_API_KEY,
+            q: searchQuery,
+            language: "en",
+            sortBy: "publishedAt",
+            page: currentPage,
+            pageSize,
+          },
+        }
+      );
+
+      const fetchedArticles = response.data.articles;
+      totalResults = response.data.totalResults;
+
+      const validArticles = fetchedArticles.filter(
+        (article: any) => article.title !== "[Removed]"
+      );
+
+      articles = articles.concat(validArticles);
+
+      if (fetchedArticles.length === 0 || articles.length >= pageSize) {
+        break;
+      }
+
+      currentPage++;
+    }
+
+    articles = articles.slice(0, pageSize);
 
     res.status(200).json({
       articles,

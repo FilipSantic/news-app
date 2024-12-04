@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import axios from "axios";
-import ArticleCard from "../ArticleCard/ArticleCard";
-import "./LatestNews.module.scss";
+import styles from "./LatestNews.module.scss";
 
 const LatestNews: React.FC = () => {
   const [articles, setArticles] = useState<any[]>([]);
@@ -15,8 +14,11 @@ const LatestNews: React.FC = () => {
       .then((response) => {
         const newArticles = response.data.articles;
         setArticles((prevArticles) => [...prevArticles, ...newArticles]);
-        setPage((prevPage) => prevPage + 1);
-        if (articles.length >= response.data.totalResults) {
+        if (
+          newArticles.length === 0 ||
+          articles.length + newArticles.length >= response.data.totalResults ||
+          articles.length + newArticles.length >= 100
+        ) {
           setHasMore(false);
         }
       })
@@ -27,22 +29,33 @@ const LatestNews: React.FC = () => {
 
   useEffect(() => {
     fetchMoreData();
-  }, []);
+  }, [page]);
 
   return (
-    <div className="latest-news-container">
-      <h2>Latest News</h2>
-      <InfiniteScroll
-        dataLength={articles.length}
-        next={fetchMoreData}
-        hasMore={hasMore}
-        loader={<h4>Loading...</h4>}
-        endMessage={<p>No more articles</p>}
-      >
-        {articles.map((article) => (
-          <ArticleCard key={article.url} article={article} />
-        ))}
-      </InfiniteScroll>
+    <div id="latestNewsContainer" className={styles.latestNews}>
+      <div className={styles.scrollableContent}>
+        <InfiniteScroll
+          dataLength={articles.length}
+          next={() => setPage((prevPage) => prevPage + 1)}
+          hasMore={hasMore}
+          loader={<h4>Loading...</h4>}
+          endMessage={<p>No more articles</p>}
+          scrollableTarget="latestNewsContainer"
+        >
+          {articles.map((article) => (
+            <div key={article.url} className={styles.article}>
+              <span className={styles.time}>
+                {new Date(article.publishedAt).toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
+              </span>
+              <p className={styles.title}>{article.title}</p>
+              <hr className={styles.separator} />
+            </div>
+          ))}
+        </InfiniteScroll>
+      </div>
     </div>
   );
 };

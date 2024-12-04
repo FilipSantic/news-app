@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import "./SearchBar.module.scss";
+import { FaSearch } from "react-icons/fa";
+import styles from "./SearchBar.module.scss";
 
 interface SearchBarProps {
   onSearch: (query: string) => void;
@@ -14,16 +15,19 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="search-bar">
+    <form onSubmit={handleSubmit} className={styles.searchBar}>
+      <div className={styles.searchIcon}>
+        <FaSearch />
+      </div>
       <input
         type="text"
         placeholder="Search news"
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
-        className="search-input"
+        className={styles.searchInput}
       />
-      <button type="submit" className="search-button">
-        Search
+      <button type="submit" className={styles.searchButton}>
+        SEARCH
       </button>
     </form>
   );

@@ -1,1 +1,48 @@
 @import "../../styles/variables";
+
+.latestNews {
+  padding: 0 1rem;
+  max-height: 70vh;
+  overflow-y: auto;
+  box-sizing: border-box;
+  background-color: white;
+
+  .scrollableContent {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .article {
+    display: flex;
+    flex-direction: column;
+    padding: 0.5rem 0;
+
+    .time {
+      font-size: 0.7rem;
+      font-weight: bold;
+      color: #1e71bb;
+    }
+
+    .title {
+      text-align: left;
+      font-size: 1rem;
+      font-weight: bold;
+      color: black;
+      margin: 0.5rem 0;
+    }
+
+    .separator {
+      border: none;
+      border-top: 1px solid #f4f5f8;
+      margin: 0;
+    }
+  }
+
+  h4,
+  p {
+    text-align: center;
+    color: #777;
+    margin: 1rem 0;
+  }
+}
