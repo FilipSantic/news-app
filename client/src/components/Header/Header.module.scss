@@ -8,6 +8,10 @@
     font-family: $font-family;
     font-size: 2rem;
 
+    .navLink {
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
     .logoPart1 {
       font-weight: 900;
       color: $primary-color;

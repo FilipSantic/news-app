@@ -6,6 +6,7 @@ import styles from "./ArticleCard.module.scss";
 interface ArticleCardProps {
   article: {
     title: string;
+    category: string;
     source: {
       name: string;
     };
@@ -27,7 +28,7 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
     }
 
     axios
-      .post("/api/bookmarks", { articleUrl: article.url })
+      .post("/api/bookmarks", { userId: user.id, articleUrl: article.url })
       .then(() => {
         setBookmarked(true);
         alert("Article bookmarked!");
@@ -48,7 +49,7 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
       >
         <img src={article.urlToImage} alt={article.title} />
         <div className={styles.articleContent}>
-          <div className={styles.category}>{article.source.name}</div>
+          <div className={styles.category}>{article.category}</div>
           <h3>{article.title}</h3>
           <p className={styles.writer}>{article.author}</p>
         </div>

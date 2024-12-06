@@ -9,9 +9,12 @@ import {
   FaFutbol,
   FaTv,
 } from "react-icons/fa";
+import { useAuth } from "../../hooks/useAuth";
 import styles from "./SideBar.module.scss";
 
 const SideBar: React.FC = () => {
+  const { user } = useAuth();
+
   return (
     <nav className={styles.sidebar}>
       <NavLink
@@ -24,15 +27,17 @@ const SideBar: React.FC = () => {
         <FaHome className={styles.icon} />
         Home
       </NavLink>
-      <NavLink
-        to="/favourites"
-        className={({ isActive }) =>
-          `${styles.navLink} ${isActive ? styles.active : ""}`
-        }
-      >
-        <FaStar className={styles.icon} />
-        Favourites
-      </NavLink>
+      {user && (
+        <NavLink
+          to="/favourites"
+          className={({ isActive }) =>
+            `${styles.navLink} ${isActive ? styles.active : ""}`
+          }
+        >
+          <FaStar className={styles.icon} />
+          Favourites
+        </NavLink>
+      )}
       <NavLink
         to="/general"
         end

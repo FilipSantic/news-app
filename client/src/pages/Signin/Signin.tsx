@@ -4,9 +4,10 @@ import * as Yup from "yup";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
-import styles from "./Signin.module.scss";
+import Header from "../../components/Header/Header";
+import styles from "./SignIn.module.scss";
 
-const Signin: React.FC = () => {
+const SignIn: React.FC = () => {
   const navigate = useNavigate();
   const { setUser } = useAuth();
 
@@ -32,7 +33,7 @@ const Signin: React.FC = () => {
     axios
       .post("/api/auth/signin", values)
       .then((response) => {
-        const userData = response.data;
+        const userData = response.data.userData;
         localStorage.setItem("user", JSON.stringify(userData));
         setUser(userData);
 
@@ -48,51 +49,56 @@ const Signin: React.FC = () => {
   };
 
   return (
-    <div className={styles.loginContainer}>
-      <h2>Sign In</h2>
-      <Formik
-        initialValues={initialValues}
-        validationSchema={validationSchema}
-        onSubmit={onSubmit}
-      >
-        {({ isSubmitting }) => (
-          <Form className={styles.loginForm}>
-            <label htmlFor="email">Email</label>
-            <Field name="email" type="email" className={styles.inputField} />
-            <ErrorMessage
-              name="email"
-              component="div"
-              className={styles.error}
-            />
+    <div className={styles.container}>
+      <div className={styles.headerSection}>
+        <Header />
+      </div>
+      <div className={styles.loginContainer}>
+        <h2>Sign In</h2>
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={onSubmit}
+        >
+          {({ isSubmitting }) => (
+            <Form className={styles.loginForm}>
+              <label htmlFor="email">Email</label>
+              <Field name="email" type="email" className={styles.inputField} />
+              <ErrorMessage
+                name="email"
+                component="div"
+                className={styles.error}
+              />
 
-            <label htmlFor="password">Password</label>
-            <Field
-              name="password"
-              type="password"
-              className={styles.inputField}
-            />
-            <ErrorMessage
-              name="password"
-              component="div"
-              className={styles.error}
-            />
+              <label htmlFor="password">Password</label>
+              <Field
+                name="password"
+                type="password"
+                className={styles.inputField}
+              />
+              <ErrorMessage
+                name="password"
+                component="div"
+                className={styles.error}
+              />
 
-            <button
-              type="submit"
-              className={styles.submitButton}
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? "Signing In..." : "Sign In"}
-            </button>
-          </Form>
-        )}
-      </Formik>
+              <button
+                type="submit"
+                className={styles.submitButton}
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? "Signing In..." : "Sign In"}
+              </button>
+            </Form>
+          )}
+        </Formik>
 
-      <p className={styles.signupPrompt}>
-        Don't have an account? <Link to="/signup">Sign Up</Link>
-      </p>
+        <p className={styles.signupPrompt}>
+          Don't have an account? <Link to="/signup">Sign Up</Link>
+        </p>
+      </div>
     </div>
   );
 };
 
-export default Signin;
+export default SignIn;

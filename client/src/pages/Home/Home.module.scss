@@ -44,6 +44,30 @@
     background-color: darkred;
   }
 
+  .welcomeMessage {
+    display: flex;
+    font-size: 1rem;
+    color: $text-color;
+    margin-right: 1rem;
+    align-items: center;
+  }
+
+  .signoutButton {
+    background-color: darkred;
+    color: white;
+    border: none;
+    padding: 0.8rem 1rem;
+    border-radius: 10px;
+    font-family: "Inter", sans-serif;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: lighten(darkred, 10%);
+    }
+  }
+
   .content {
     display: flex;
     flex-direction: row;

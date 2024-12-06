@@ -7,7 +7,12 @@ import transporter from "../config/mail";
 
 export const signup = async (req: Request, res: Response) => {
   try {
-    const { firstName, lastName, email, password } = req.body;
+    const { firstName, lastName, email, password, confirmPassword } = req.body;
+
+    if (password !== confirmPassword) {
+      res.status(400).json({ message: "Passwords do not match" });
+      return;
+    }
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -73,10 +78,18 @@ export const signin = async (req: Request, res: Response) => {
     }
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET as string, {
-      expiresIn: process.env.TOKEN_EXPIRATION,
+      expiresIn: process.env.TOKEN_EXPIRATION as string,
     });
 
-    res.status(200).json({ message: "Sign-in successful", token });
+    const userData = {
+      id: user._id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      token,
+    };
+
+    res.status(200).json({ message: "Sign-in successful", userData });
   } catch (error: any) {
     console.error("Error during sign-in:", error);
     res.status(500).json({ message: "Server error" });
@@ -144,7 +157,7 @@ export const resendVerificationEmail = async (req: Request, res: Response) => {
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: user.email,
-      subject: "Sign-up Verification",
+      subject: "News App Sign-up Verification",
       html: `<p>Please verify your email by clicking <a href="${verificationLink}">here</a>.</p>`,
     });
 

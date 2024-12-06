@@ -1,12 +1,12 @@
 import { Response } from "express";
+import { ObjectId } from "mongodb";
 import { AuthenticatedRequest } from "../middleware/authMiddleware";
 import Bookmark from "../models/Bookmark";
 import { fetchArticleByUrl } from "../services/newsService";
 
 export const addBookmark = async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const userId = req.user?.id;
-    const { articleUrl } = req.body;
+    const { userId, articleUrl } = req.body;
 
     if (!userId) {
       res.status(401).json({ message: "Unauthorized" });
@@ -19,7 +19,7 @@ export const addBookmark = async (req: AuthenticatedRequest, res: Response) => {
     }
 
     const bookmark = new Bookmark({
-      user: userId,
+      user: new ObjectId(userId),
       articleUrl,
     });
 
@@ -43,7 +43,7 @@ export const getBookmarks = async (
   res: Response
 ) => {
   try {
-    const userId = req.user?.id;
+    const userId = req.query.userId;
 
     if (!userId) {
       res.status(401).json({ message: "Unauthorized" });

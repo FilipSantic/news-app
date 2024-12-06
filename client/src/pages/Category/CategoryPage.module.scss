@@ -1,0 +1,93 @@
+@import "../../styles/variables";
+
+.container {
+  background-color: $background-color;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding-bottom: 4rem;
+
+  .headerSection {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2rem 0;
+    border-bottom: 1px solid rgba(151, 151, 151, 0.1);
+    box-sizing: border-box;
+  }
+
+  .authButtons {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .signinButton,
+  .signupButton {
+    background-color: $primary-color;
+    color: white;
+    border: none;
+    padding: 0.8rem 1rem;
+    border-radius: 10px;
+    font-family: "Inter", sans-serif;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: darken($primary-color, 10%);
+    }
+  }
+
+  .signupButton {
+    background-color: darkred;
+  }
+
+  .welcomeMessage {
+    display: flex;
+    font-size: 1rem;
+    color: $text-color;
+    margin-right: 1rem;
+    align-items: center;
+  }
+
+  .signoutButton {
+    background-color: darkred;
+    color: white;
+    border: none;
+    padding: 0.8rem 1rem;
+    border-radius: 10px;
+    font-family: "Inter", sans-serif;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: lighten(darkred, 10%);
+    }
+  }
+
+  .content {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+  }
+
+  .mainContent {
+    flex: 3;
+    display: flex;
+    flex-direction: column;
+
+    h2 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .articlesGrid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+  }
+}
