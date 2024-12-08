@@ -272,7 +272,7 @@ export const searchNewsByCategory = async (req: Request, res: Response) => {
 
     while (articles.length < pageSize) {
       const response = await axios.get(
-        `${process.env.NEWS_API_URL}/everything`,
+        `${process.env.NEWS_API_URL}/top-headlines`,
         {
           params: {
             apiKey: process.env.NEWS_API_KEY,

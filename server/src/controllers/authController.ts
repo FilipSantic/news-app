@@ -37,7 +37,7 @@ export const signup = async (req: Request, res: Response) => {
 
     await user.save();
 
-    const verificationLink = `${process.env.CLIENT_URL}/api/auth/verify-email?token=${verificationToken}`;
+    const verificationLink = `${process.env.CLIENT_URL}/verify-email?token=${verificationToken}`;
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: user.email,

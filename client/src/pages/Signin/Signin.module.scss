@@ -14,6 +14,11 @@
     padding: 2rem 0;
     border-bottom: 1px solid rgba(151, 151, 151, 0.1);
     box-sizing: border-box;
+
+    @media (max-width: 768px) {
+      display: flex;
+      justify-content: center;
+    }
   }
 
   .loginContainer {
@@ -24,7 +29,7 @@
     padding: 0.6rem;
 
     h2 {
-      font-size: 2rem;
+      font-size: 1.6rem;
       font-weight: bold;
       text-align: center;
       color: $primary-color;

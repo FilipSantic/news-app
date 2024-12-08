@@ -3,6 +3,7 @@ import authenticateToken from "../middleware/authMiddleware";
 import {
   addBookmark,
   getBookmarks,
+  bookmarkStatus,
   removeBookmark,
 } from "../controllers/bookmarkController";
 
@@ -12,6 +13,7 @@ router.use(authenticateToken);
 
 router.post("/", addBookmark);
 router.get("/", getBookmarks);
-router.delete("/:id", removeBookmark);
+router.get("/status", bookmarkStatus);
+router.delete("/", removeBookmark);
 
 export default router;

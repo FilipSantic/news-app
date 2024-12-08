@@ -2,25 +2,34 @@ import { Response } from "express";
 import { ObjectId } from "mongodb";
 import { AuthenticatedRequest } from "../middleware/authMiddleware";
 import Bookmark from "../models/Bookmark";
-import { fetchArticleByUrl } from "../services/newsService";
 
 export const addBookmark = async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const { userId, articleUrl } = req.body;
+    const { userId, article } = req.body;
 
     if (!userId) {
       res.status(401).json({ message: "Unauthorized" });
       return;
     }
 
-    if (!articleUrl) {
-      res.status(400).json({ message: "Article URL is required" });
+    if (!article) {
+      res.status(400).json({ message: "Article is required" });
+      return;
+    }
+
+    const existingBookmark = await Bookmark.findOne({
+      user: new ObjectId(userId),
+      "article.url": article.url,
+    });
+
+    if (existingBookmark) {
+      res.status(400).json({ message: "Article already bookmarked" });
       return;
     }
 
     const bookmark = new Bookmark({
       user: new ObjectId(userId),
-      articleUrl,
+      article,
     });
 
     await bookmark.save();
@@ -54,26 +63,40 @@ export const getBookmarks = async (
       createdAt: -1,
     });
 
-    const articles = await Promise.all(
-      bookmarks.map(async (bookmark) => {
-        try {
-          const article = await fetchArticleByUrl(bookmark.articleUrl);
-          return article;
-        } catch (error) {
-          console.error(
-            `Error fetching article for URL ${bookmark.articleUrl}:`,
-            error
-          );
-          return null;
-        }
-      })
-    );
+    if (!bookmarks.length) {
+      res.status(404).json({ message: "No bookmarks found" });
+      return;
+    }
 
-    const validArticles = articles.filter((article) => article !== null);
+    const articles = bookmarks.map((bookmark) => bookmark.article);
 
-    res.status(200).json({ articles: validArticles });
+    res.status(200).json({ articles });
   } catch (error: any) {
     console.error("Error fetching bookmarks:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const bookmarkStatus = async (
+  req: AuthenticatedRequest,
+  res: Response
+) => {
+  try {
+    const { userId, articleUrl } = req.query;
+
+    if (!userId || !articleUrl) {
+      res.status(400).json({ message: "Invalid request parameters" });
+      return;
+    }
+
+    const bookmark = await Bookmark.findOne({
+      user: userId,
+      "article.url": articleUrl,
+    });
+
+    res.status(200).json({ bookmarked: !!bookmark });
+  } catch (error) {
+    console.error("Error checking bookmark status:", error);
     res.status(500).json({ message: "Server error" });
   }
 };
@@ -83,26 +106,20 @@ export const removeBookmark = async (
   res: Response
 ) => {
   try {
-    const userId = req.user?.id;
-    const bookmarkId = req.params.id;
+    const { userId, articleUrl } = req.body;
 
-    if (!userId) {
-      res.status(401).json({ message: "Unauthorized" });
+    if (!userId || !articleUrl) {
+      res.status(400).json({ message: "Invalid request parameters" });
       return;
     }
 
-    const bookmark = await Bookmark.findOneAndDelete({
-      _id: bookmarkId,
+    await Bookmark.findOneAndDelete({
       user: userId,
+      "article.url": articleUrl,
     });
 
-    if (!bookmark) {
-      res.status(404).json({ message: "Bookmark not found" });
-      return;
-    }
-
-    res.status(200).json({ message: "Bookmark removed" });
-  } catch (error: any) {
+    res.status(200).json({ message: "Bookmark removed successfully" });
+  } catch (error) {
     console.error("Error removing bookmark:", error);
     res.status(500).json({ message: "Server error" });
   }

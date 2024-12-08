@@ -5,6 +5,7 @@
   display: flex;
   flex-direction: column;
   margin: 0 auto;
+  width: 100%;
   min-height: 100vh;
   box-sizing: border-box;
   padding-bottom: 4rem;
@@ -16,15 +17,101 @@
     padding: 2rem 0;
     border-bottom: 1px solid rgba(151, 151, 151, 0.1);
     box-sizing: border-box;
+
+    @media (max-width: 768px) {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      margin-top: 1rem;
+      padding: 0 1rem;
+      gap: 1rem;
+      border-bottom: none;
+    }
+
+    .headerAndMenu {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-sizing: border-box;
+
+      @media (max-width: 768px) {
+        width: 100%;
+      }
+    }
+
+    .hamburgerIcon {
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      width: 2rem;
+      height: 1.5rem;
+      cursor: pointer;
+
+      span {
+        display: block;
+        width: 100%;
+        height: 0.25rem;
+        background-color: $text-color;
+        border-radius: 2px;
+      }
+
+      @media (max-width: 768px) {
+        display: flex;
+      }
+    }
+
+    .mobileMenu {
+      position: absolute;
+      place-items: center;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background-color: $background-color;
+      z-index: 10;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+      .mobileMenuContent {
+        display: flex;
+        flex-direction: column;
+        place-items: center;
+        width: 90%;
+        margin-top: 6rem;
+        margin-bottom: 1rem;
+        gap: 3rem;
+      }
+
+      .closeIcon {
+        position: absolute;
+        top: 1.2rem;
+        right: 1rem;
+        cursor: pointer;
+        font-size: 1.5rem;
+        color: #000;
+        display: flex;
+      }
+    }
   }
 
   .authButtons {
     display: flex;
     gap: 1rem;
+
+    @media (max-width: 768px) {
+      display: none;
+    }
   }
 
-  .signinButton,
-  .signupButton {
+  .mobileAuthButtons {
+    @media (max-width: 768px) {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      padding-bottom: 1rem;
+    }
+  }
+
+  .signinButton {
     background-color: $primary-color;
     color: white;
     border: none;
@@ -38,10 +125,10 @@
     &:hover {
       background-color: darken($primary-color, 10%);
     }
-  }
 
-  .signupButton {
-    background-color: darkred;
+    @media (max-width: 768px) {
+      display: flex;
+    }
   }
 
   .welcomeMessage {
@@ -50,6 +137,10 @@
     color: $text-color;
     margin-right: 1rem;
     align-items: center;
+
+    @media (max-width: 768px) {
+      display: none;
+    }
   }
 
   .signoutButton {
@@ -66,6 +157,10 @@
     &:hover {
       background-color: lighten(darkred, 10%);
     }
+
+    @media (max-width: 768px) {
+      display: flex;
+    }
   }
 
   .content {
@@ -74,10 +169,51 @@
     gap: 2rem;
   }
 
+  .sidebarContent {
+    @media (max-width: 768px) {
+      display: none;
+    }
+  }
+
   .mainContent {
     flex: 3;
     display: flex;
     flex-direction: column;
+  }
+
+  .desktopHeading {
+    display: block;
+
+    @media (max-width: 768px) {
+      display: none;
+    }
+  }
+
+  .mobileToggle {
+    display: none;
+    justify-content: center;
+    gap: 2rem;
+    margin: 1rem 0;
+    cursor: pointer;
+
+    @media (max-width: 768px) {
+      display: flex;
+    }
+
+    .toggleButton {
+      font-size: 1rem;
+      color: $text-color;
+      padding: 0.5rem 1rem;
+      border-bottom: 2px solid transparent;
+      transition: border-color 0.3s ease;
+
+      &.active {
+        font-weight: bold;
+        color: $primary-color;
+        background-color: #bb1e1e1a;
+        border-radius: 2rem;
+      }
+    }
   }
 
   .articleSection {
@@ -95,11 +231,43 @@
       gap: 1rem;
       align-items: stretch;
 
+      @media (max-width: 768px) {
+        display: block;
+      }
+
+      .mobileOnly {
+        display: none;
+
+        @media (max-width: 768px) {
+          display: block;
+        }
+      }
+
+      .desktopOnly {
+        display: block;
+
+        @media (max-width: 768px) {
+          display: none;
+        }
+      }
+
+      @media (max-width: 768px) {
+        padding: 0 1rem;
+        grid-template-columns: 1fr;
+        justify-items: stretch;
+      }
+
       .articlesGrid {
         grid-column: 1 / span 2;
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 1rem;
+
+        @media (max-width: 768px) {
+          padding: 0 1rem;
+          grid-template-columns: 1fr;
+          justify-items: stretch;
+        }
       }
 
       .latestNewsWrapper {
@@ -110,6 +278,11 @@
         border: 1px solid #ddd;
         border-radius: 8px;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+        @media (max-width: 768px) {
+          grid-column: 1;
+          justify-items: stretch;
+        }
 
         h2 {
           margin: 0;
@@ -126,6 +299,19 @@
           height: 1.2rem;
           margin-right: 8px;
           vertical-align: middle;
+          animation: blink 2s infinite;
+
+          @keyframes blink {
+            0% {
+              opacity: 1;
+            }
+            50% {
+              opacity: 0;
+            }
+            100% {
+              opacity: 1;
+            }
+          }
         }
 
         ::-webkit-scrollbar {
@@ -160,6 +346,12 @@
         display: grid;
         grid-template-columns: 1fr 1fr 1fr;
         gap: 1rem;
+
+        @media (max-width: 768px) {
+          padding: 0 1rem;
+          grid-template-columns: 1fr;
+          justify-items: stretch;
+        }
       }
     }
   }

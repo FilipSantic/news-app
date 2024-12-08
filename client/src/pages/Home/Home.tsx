@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
+import { FaTimes } from "react-icons/fa";
 import axios from "axios";
 import Header from "../../components/Header/Header";
 import ArticleCard from "../../components/ArticleCard/ArticleCard";
@@ -11,9 +12,6 @@ import styles from "./Home.module.scss";
 
 interface Article {
   title: string;
-  source: {
-    name: string;
-  };
   author: string;
   url: string;
   urlToImage: string;
@@ -24,6 +22,8 @@ const Home: React.FC = () => {
   const { user, isLoggedIn, signOut } = useAuth();
   const navigate = useNavigate();
   const [articles, setArticles] = useState<Article[]>([]);
+  const [isFeatured, setIsFeatured] = useState(true);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleSearch = (query: string) => {
     axios
@@ -55,8 +55,54 @@ const Home: React.FC = () => {
   return (
     <div className={styles.container}>
       <div className={styles.headerSection}>
-        <Header />
-        <SearchBar onSearch={handleSearch} />
+        <div className={styles.headerAndMenu}>
+          <Header />
+          <div
+            className={styles.hamburgerIcon}
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          {isMenuOpen && (
+            <div className={styles.mobileMenu}>
+              <div
+                className={styles.closeIcon}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <FaTimes />
+              </div>
+              <div className={styles.mobileMenuContent}>
+                <Header />
+                <SearchBar
+                  onSearch={handleSearch}
+                  placeholder="Search all news"
+                />
+              </div>
+              <SideBar />
+              <div className={styles.mobileAuthButtons}>
+                {!isLoggedIn ? (
+                  <>
+                    <button
+                      className={styles.signinButton}
+                      onClick={() => navigate("/signin")}
+                    >
+                      SIGN IN
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button className={styles.signoutButton} onClick={signOut}>
+                      SIGN OUT
+                    </button>
+                  </>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+        <SearchBar onSearch={handleSearch} placeholder="Search all news" />
         <div className={styles.authButtons}>
           {!isLoggedIn ? (
             <>
@@ -65,12 +111,6 @@ const Home: React.FC = () => {
                 onClick={() => navigate("/signin")}
               >
                 SIGN IN
-              </button>
-              <button
-                className={styles.signupButton}
-                onClick={() => navigate("/signup")}
-              >
-                SIGN UP
               </button>
             </>
           ) : (
@@ -86,17 +126,60 @@ const Home: React.FC = () => {
         </div>
       </div>
       <div className={styles.content}>
-        <SideBar />
+        <div className={styles.sidebarContent}>
+          <SideBar />
+        </div>
         <div className={styles.mainContent}>
-          <h2>News</h2>
+          <h2 className={styles.desktopHeading}>News</h2>
+          <div className={styles.mobileToggle}>
+            <span
+              className={`${styles.toggleButton} ${
+                isFeatured ? styles.active : ""
+              }`}
+              onClick={() => setIsFeatured(true)}
+            >
+              Featured
+            </span>
+            <span
+              className={`${styles.toggleButton} ${
+                !isFeatured ? styles.active : ""
+              }`}
+              onClick={() => setIsFeatured(false)}
+            >
+              Latest
+            </span>
+          </div>
           <div className={styles.articleSection}>
             <div className={styles.twoColumnSection}>
-              <div className={styles.articlesGrid}>
+              {isFeatured ? (
+                <div className={`${styles.articlesGrid} ${styles.mobileOnly}`}>
+                  {firstTwoRows.map((article) => (
+                    <ArticleCard key={article.url} article={article} />
+                  ))}
+                </div>
+              ) : (
+                <div
+                  className={`${styles.latestNewsWrapper} ${styles.mobileOnly}`}
+                >
+                  <h2>
+                    <img
+                      src="/images/latest_news.png"
+                      alt="Latest News Icon"
+                      className={styles.newsIcon}
+                    />{" "}
+                    Latest news
+                  </h2>
+                  <LatestNews />
+                </div>
+              )}
+              <div className={`${styles.articlesGrid} ${styles.desktopOnly}`}>
                 {firstTwoRows.map((article) => (
                   <ArticleCard key={article.url} article={article} />
                 ))}
               </div>
-              <div className={styles.latestNewsWrapper}>
+              <div
+                className={`${styles.latestNewsWrapper} ${styles.desktopOnly}`}
+              >
                 <h2>
                   <img
                     src="/images/latest_news.png"
