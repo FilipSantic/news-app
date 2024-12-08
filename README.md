@@ -4,11 +4,11 @@
 
 ## Table of Contents
 
-- [Overview](#-overview)
-- [Features](#-features)
-- [Installation](#-installation)
-- [Dependencies](#-dependencies)
-- [Contacts](#-contacts)
+- [Overview](#overview)
+- [Features](#features)
+- [Installation](#installation)
+- [Dependencies](#dependencies)
+- [Contacts](#contacts)
 
 ## Overview
 
