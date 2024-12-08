@@ -71,83 +71,81 @@ npm start
 
 ## Dependencies
 
-### Typescript
+### Frontend and Backend dependencies
+
+#### Axios
+
+HTTP Request client which was used for communicating to News API service or backend server. Used mostly for easier transformation of JSON data.
+
+#### Typescript
 
 Enhanced code quality and maintainability in comparison to plain Javascript - used for frontend and backend.
 
-1. Backend dependencies
+### Backend dependencies
 
-### Axios
-
-HTTP Request client which was used for communicating to News API service. Used mostly for easier transformation of JSON data.
-
-### Bcrypt
+#### Bcrypt
 
 Used for strong password protection because it creates unique salt to each password, and thus it's harder to crack. Widely trusted in the industry for password hashing.
 
-### Colors
+#### Colors
 
 Personal preference to style console output. Used only for enhancing and readability, doesn't affect application logic.
 
-### Cors
+#### Cors
 
 This package is used for preventing unauthorized domains from accessing server resources. If frontend and backend are hosted on different domains, then it's essential.
 
-### Dotenv
+#### Dotenv
 
 Used for loading environment variables from .env file. Used for storing sensitive information for security reasons.
 
-### Express
+#### Express
 
 Node.js web framework used for simple process of building robust APIs and web applications. Used for HTTP requests, routing and middleware.
 
-### JSON Web Token
+#### JSON Web Token
 
 Used for authentication and authorization tokens between client and server.
 
-### Mongoose
+#### Mongoose
 
 Library for MongoDB and Node.js. Simplifies interaction with MongoDB (which is used as the database to this project) through CRUD operations.
 
-### Morgan
+#### Morgan
 
 Used for logging middleware with more details. Useful for monitoring API activity.
 
-### Nodemailer
+#### Nodemailer
 
 Used for easier email sending.
 
-2. Frontend dependencies
+### Frontend dependencies
 
-### Axios
-
-Used as HTTP client to backend server.
-
-### Formik
+#### Formik
 
 Simplifies form management (used for sign in and sign up forms). Reduces the need of manual validation of input field.
 
-### jwt-decode
+#### jwt-decode
 
 Used for decoding JWT tokens for authentication and authorization. Extracts token and expiration time.
 
-### React icons
+#### React icons
 
 Collection of icons used for better styling of the application. In this case, Font Awesome icons are used.
 
-### React-Infinite-Scroll-Component
+#### React-Infinite-Scroll-Component
 
 Latest News component is built using React-Infinite-Scroll-Component which helps automatically load additional content when user reaches the end of the current content.
 
-### react-router-dom
+#### react-router-dom
 
 Used for easier navigation through the application without reloading the page. Easier implementation of protected routes.
 
-### Sass
+#### Sass
 
 Scripting language used for CSS extensions. Advanced features which are not available in vanilla CSS are used. Easier to manage and update. This is the part which could be even more simplified by reusing existing code.
 
-### Yup
+#### Yup
 
 Schema builder for value parsing and validation, used together with Formik for easier management of input fields.
 
