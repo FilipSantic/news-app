@@ -52,6 +52,10 @@ const Home: React.FC = () => {
   const firstTwoRows = articles.slice(0, 4);
   const remainingArticles = articles.slice(4);
 
+  const firstTwoRowsContent = firstTwoRows.map((article) => (
+    <ArticleCard key={article.url} article={article} />
+  ));
+
   return (
     <div className={styles.container}>
       <div className={styles.headerSection}>
@@ -151,13 +155,25 @@ const Home: React.FC = () => {
           </div>
           <div className={styles.articleSection}>
             <div className={styles.twoColumnSection}>
-              {isFeatured ? (
-                <div className={`${styles.articlesGrid} ${styles.mobileOnly}`}>
-                  {firstTwoRows.map((article) => (
-                    <ArticleCard key={article.url} article={article} />
-                  ))}
+              {isFeatured && (
+                <div className={`${styles.articlesGrid}`}>
+                  {firstTwoRowsContent}
                 </div>
-              ) : (
+              )}
+              <div
+                className={`${styles.latestNewsWrapper} ${styles.desktopOnly}`}
+              >
+                <h2>
+                  <img
+                    src="/images/latest_news.png"
+                    alt="Latest News Icon"
+                    className={styles.newsIcon}
+                  />{" "}
+                  Latest news
+                </h2>
+                <LatestNews />
+              </div>
+              {!isFeatured && (
                 <div
                   className={`${styles.latestNewsWrapper} ${styles.mobileOnly}`}
                 >
@@ -172,26 +188,12 @@ const Home: React.FC = () => {
                   <LatestNews />
                 </div>
               )}
-              <div className={`${styles.articlesGrid} ${styles.desktopOnly}`}>
-                {firstTwoRows.map((article) => (
-                  <ArticleCard key={article.url} article={article} />
-                ))}
-              </div>
-              <div
-                className={`${styles.latestNewsWrapper} ${styles.desktopOnly}`}
-              >
-                <h2>
-                  <img
-                    src="/images/latest_news.png"
-                    alt="Latest News Icon"
-                    className={styles.newsIcon}
-                  />{" "}
-                  Latest news
-                </h2>
-                <LatestNews />
-              </div>
             </div>
-            <div className={styles.threeColumnSection}>
+            <div
+              className={`${styles.threeColumnSection} ${
+                !isFeatured ? styles.mobileHidden : ""
+              }`}
+            >
               <div className={styles.articlesGrid}>
                 {remainingArticles.map((article) => (
                   <ArticleCard key={article.url} article={article} />
